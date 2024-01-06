@@ -1,21 +1,14 @@
-
 import json
 import PIL
 from PIL import Image,ImageDraw
 import socketserver
 
 
-
-
-
 # this will show image in any image viewer
-
 # Save the edited image
+# img.save("car2.png")
 
-
-#img.save("car2.png")
-
-
+reports = {}
 
 
 
@@ -34,19 +27,34 @@ class MyTCPHandler(socketserver.BaseRequestHandler):
         #print("{} wrote:".format(self.client_address[0]))
         #print(self.data)
         to_str = self.data.decode()
-        in_dict = json.loads(to_str)
-        report =in_dict["NAME"] + ' Ocerdue: ' + str(in_dict["OVERDUE"]) + ' Day: ' + str(in_dict['CURRENT']) + ' Interval'+str(in_dict['PERIOD'])
+        report = json.loads(to_str)
+        in_dict = report
+        reports[report["NAME"]] = report
+        #report = in_dict["NAME"] + ' Overdue: ' + str(in_dict["OVERDUE"]) + ' Day: ' + str(in_dict['CURRENT']) + ' Interval'+str(in_dict['PERIOD'])
+        print('{|\n')
+        print('|+ Maintenance Due\n')
+        print('|-\n')
+        print('! Maintenance !! Overdue !! Current Day !! Maintenance Interval\n')
+        print('|-\n')
+        for i in reports.keys():
+            print('| ' + reports[i]["NAME"] + '||' +str(reports[i]["OVERDUE"])+ '||' + str(reports[i]["CURRENT"]) + '||' + str(reports[i]["PERIOD"]) + '\n')
+            print('|-\n')
+        print('|}')
+
+
+#        for report in reports.keys():
+            
         # creating image object which is of specific color
-        img = PIL.Image.new(mode = "RGB", size = (600, 200),
-                           color = (153, 153, 255))
+#        img = PIL.Image.new(mode = "RGB", size = (600, 200),
+#                           color = (153, 153, 255))
         # Open an Image
         # Call draw Method to add 2D graphics in an image
-        I1 = ImageDraw.Draw(img)
+ #       I1 = ImageDraw.Draw(img)
         # Add Text to an image
-        I1.text((28, 36), report, fill=(255, 255, 0))
+       # I1.text((28, 36), report, fill=(255, 255, 0))
         # Display edited image
-        img.show()
-        img.save("T.png")
+        #img.show()
+ #       img.save("T.png")
 
         
 if __name__ == "__main__":
