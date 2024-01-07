@@ -13,7 +13,6 @@ import socket
 
 
 CLEAR_SAVED = True
-
 BUZZ_ENABLED = True
 BUZZ_EVERY=10
 BUZZ_FREQ=5

@@ -3,7 +3,6 @@ import PIL
 from PIL import Image,ImageDraw
 import socketserver
 
-
 # this will show image in any image viewer
 # Save the edited image
 # img.save("car2.png")
@@ -31,17 +30,22 @@ class MyTCPHandler(socketserver.BaseRequestHandler):
         in_dict = report
         reports[report["NAME"]] = report
         #report = in_dict["NAME"] + ' Overdue: ' + str(in_dict["OVERDUE"]) + ' Day: ' + str(in_dict['CURRENT']) + ' Interval'+str(in_dict['PERIOD'])
-        print('{|\n')
-        print('|+ Maintenance Due\n')
-        print('|-\n')
-        print('! Maintenance !! Overdue !! Current Day !! Maintenance Interval\n')
-        print('|-\n')
+        try:
+            f =open('reports.json',"w")
+            f.write(json.dumps(reports))
+            f.close()
+        except:
+            pass
+
+        wiki_text ='{|\n' + '|+ Maintenance Due\n' 
+        wiki_text = wiki_text + '|-\n'
+        wiki_text = wiki_text + '! Maintenance !! Overdue !! Current Day !! Maintenance Interval\n'
+        wiki_text = wiki_text + '|-\n'
         for i in reports.keys():
-            print('| ' + reports[i]["NAME"] + '||' +str(reports[i]["OVERDUE"])+ '||' + str(reports[i]["CURRENT"]) + '||' + str(reports[i]["PERIOD"]) + '\n')
-            print('|-\n')
-        print('|}')
-
-
+            wiki_text = wiki_text + '| ' + reports[i]["NAME"] + '||' +str(reports[i]["OVERDUE"])+ '||' + str(reports[i]["CURRENT"]) + '||' + str(reports[i]["PERIOD"]) + '\n'
+            wiki_text = wiki_text + '|-\n'
+        wiki_text = wiki_text + '|}'
+        print(wiki_text)
 #        for report in reports.keys():
             
         # creating image object which is of specific color
